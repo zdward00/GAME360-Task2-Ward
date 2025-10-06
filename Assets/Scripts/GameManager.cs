@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public Text livesText;
     public Text enemiesKilledText;
     public GameObject gameOverPanel;
+    public GameObject gameStartPanel;
     //public TMP_Text scoreText;
 
     private void Awake()
@@ -49,14 +50,13 @@ public class GameManager : MonoBehaviour
     {
         RefreshUIReferences();
         UpdateUI();
-
+        if (gameStartPanel) gameStartPanel.SetActive(true);
     }
 
     private void Start()
     {
         RefreshUIReferences();
         UpdateUI();
-
     }
 
     private void RefreshUIReferences()
@@ -69,6 +69,12 @@ public class GameManager : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
+        }
+
+        gameStartPanel = GameObject.Find("GameStartPanel");
+        if (gameStartPanel != null)
+        {
+            gameStartPanel.SetActive(false);
         }
 
     }
@@ -141,7 +147,7 @@ public class GameManager : MonoBehaviour
         lives = 3;
         enemiesKilled = 0;
 
-         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
        
     }
 
