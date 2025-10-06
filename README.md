@@ -9,16 +9,17 @@ Singleton Pattern
 
 ## Pattern: Singleton
 ### Implementation
-[How you implemented it - 100 words]
+Implemented via GameManager.cs script that handles the majority of overhead behavior. 
 
 ### Game Integration
-[How pattern is used - 100 words]
+Pattern is used by calling GameManager.Instance when needed, particularly for game management states such as lives, score, and enemies killed. Also helps with
+removing game state upon reset. 
 
 ## Game Description
-- Title: [Game Name]
-- Controls: [List them]
-- Objective: [How to win]
+- Title: SharpShooter
+- Controls: Arrow keys to move, G to shoot
+- Objective: Last as long as you can while eliminating enemies. The game ends when you run out of lives. 
 
 ## Repository Stats
-- Total Commits: [Number]
-- Development Time: [Hours]
+- Total Commits: 11
+- Development Time: 7 hours
