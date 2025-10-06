@@ -54,8 +54,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //RefreshUIReferences();
-        //UpdateUI();
+        RefreshUIReferences();
+        UpdateUI();
 
     }
 
