@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         // Singleton pattern implementation
-        if (Instance == null)
+       if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject); // Persist across scenes
@@ -124,6 +124,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("GAME OVER!");
         if (gameOverPanel) gameOverPanel.SetActive(true);
         Time.timeScale = 0f; // Pause the game
+        SceneManager.LoadScene("GameOver");
     }
 
     public void reloadGame()
@@ -147,7 +148,7 @@ public class GameManager : MonoBehaviour
         lives = 3;
         enemiesKilled = 0;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("singleton");
        
     }
 

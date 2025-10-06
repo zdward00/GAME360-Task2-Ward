@@ -3,9 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class StartGame : MonoBehaviour
 {
-    public void Start()
+    public void PlayGame()
     {
+        Debug.Log($"Clicked");
+        SceneManager.LoadScene("singleton");
         
-        SceneManager.LoadScene("singleton"); 
+    }
+
+    public void Quit()
+    {
+        Debug.Log($"Clicked");
+        GameManager.Instance.quitGame();
     }
 }
