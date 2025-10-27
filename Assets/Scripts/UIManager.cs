@@ -8,10 +8,15 @@ public class UIManager : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text timerText;
     public TMP_Text stateText;
+    public TMP_Text livesText;
     public TMP_Text enemiesKilledText;
     //public TMP_Text coinText;
     public GameObject gameOverPanel;
-    public GameObject gameStartPanel;
+
+    [Header("Game Stats")]
+    public int score = 0;//score is calculated
+    public int lives = 3;
+    public int enemiesKilled = 0;
 
 
     void Start()
@@ -22,7 +27,6 @@ public class UIManager : MonoBehaviour
         EventManager.Subscribe("OnScoreChanged", UpdateScore);
         EventManager.Subscribe("OnPlayerStateChanged", UpdateStateDisplay);
         EventManager.Subscribe("OnGameOver", ShowGameOver); // GAME OVER
-        EventManager.Subscribe("OnGameStart", ShowStart); // Game Start
 
         // Initialize
         if (gameOverPanel != null)
@@ -68,14 +72,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /*void UpdateCoinCount(object coinValue)
-    {
-        coinCount++;
-        if (coinText != null)
-        {
-            coinText.text = "Coins: " + coinCount;
-        }
-    }*/
 
     void ShowGameOver(object finalScore)
     {
@@ -85,6 +81,7 @@ public class UIManager : MonoBehaviour
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
+            Time.timeScale = 0f; // Pause the game
             Debug.Log("Game Over Panel activated");
         }
         else
@@ -93,28 +90,30 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void ShowStart()
-    {
-        Debug.Log("🔴 SHOWING START PANEL");
-
-        // Show start panel
-        if (gameStartPanel != null)
-        {
-            gameStartPanel.SetActive(true);
-            Debug.Log("Game Start Panel activated");
-
-        }
-        else
-        {
-            Debug.LogError("❌ Game Start Panel is NULL!");
-        }
-    }
 
     public void OnRestartButton()
     {
         if (GameManager.Instance != null)
         { 
             GameManager.Instance.RestartGame();
+        }
+    }
+
+    public void AddScore(int points)
+    {
+        score += points;
+        Debug.Log($"Score increased by {points}. Total: {score}");
+    }
+
+    public void LoseLife()
+    {
+       lives--;
+        Debug.Log($"Life lost! Lives remaining: {lives}");
+        GameManager.Instance.UpdateUI();
+
+        if (GameManager.Instance.lives <= 0)
+        {
+           GameManager.Instance.GameOver();
         }
     }
 }

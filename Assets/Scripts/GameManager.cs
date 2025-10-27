@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
     public int enemiesKilled = 0;
 
     [Header("UI References")]
-    public Text scoreText;
-    public Text livesText;
-    public Text enemiesKilledText;
+    public TMP_Text scoreText;
+    public TMP_Text livesText;
+    public TMP_Text enemiesKilledText;
     public GameObject gameOverPanel;
     public GameObject gameStartPanel;
     //public TMP_Text scoreText;
@@ -41,30 +41,30 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         RefreshUIReferences();
         UpdateUI();
         if (gameStartPanel) gameStartPanel.SetActive(true);
     }
 
-    private void Start()
+    public void Start()
     {
         RefreshUIReferences();
         UpdateUI();
     }
 
-    private void RefreshUIReferences()
+    public void RefreshUIReferences()
     {
         
-       scoreText = GameObject.Find("Score")?.GetComponent<Text>();
-       livesText = GameObject.Find("Lives")?.GetComponent<Text>();
-       enemiesKilledText = GameObject.Find("EnemiesKilled")?.GetComponent<Text>();
+       scoreText = GameObject.Find("Score")?.GetComponent<TMP_Text>();
+       livesText = GameObject.Find("Lives")?.GetComponent<TMP_Text>();
+       enemiesKilledText = GameObject.Find("EnemiesKilled")?.GetComponent<TMP_Text>();
        gameOverPanel = GameObject.Find("GameEndPanel");
         if (gameOverPanel != null)
         {
@@ -74,7 +74,8 @@ public class GameManager : MonoBehaviour
         gameStartPanel = GameObject.Find("GameStartPanel");
         if (gameStartPanel != null)
         {
-            gameStartPanel.SetActive(false);
+            gameStartPanel.SetActive(true);
+            Time.timeScale = 0f; // Pause the game
         }
 
     }
@@ -112,19 +113,18 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Collectible picked up worth {value} points!");
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         if (scoreText) scoreText.text = "Score: " + score;
         if (livesText) livesText.text = "Lives: " + lives;
         if (enemiesKilledText) enemiesKilledText.text = "Enemies: " + enemiesKilled;
     }
 
-    private void GameOver()
+    public void GameOver()
     {
         Debug.Log("GAME OVER!");
         if (gameOverPanel) gameOverPanel.SetActive(true);
         Time.timeScale = 0f; // Pause the game
-        SceneManager.LoadScene("GameOver");
     }
 
     public void reloadGame()
@@ -152,7 +152,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void DestroyAllGameObjects()
+    public void DestroyAllGameObjects()
     {
         // Destroy all enemies
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
