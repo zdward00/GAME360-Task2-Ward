@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text scoreText;
     public TMP_Text timerText;
     public TMP_Text stateText;
+    public TMP_Text enemiesKilledText;
     //public TMP_Text coinText;
     public GameObject gameOverPanel;
     public GameObject gameStartPanel;
@@ -101,7 +102,7 @@ public class UIManager : MonoBehaviour
         {
             gameStartPanel.SetActive(true);
             Debug.Log("Game Start Panel activated");
-            Time.timeScale = 0f; // Pause the game
+
         }
         else
         {

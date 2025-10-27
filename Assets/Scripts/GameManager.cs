@@ -148,8 +148,8 @@ public class GameManager : MonoBehaviour
         lives = 3;
         enemiesKilled = 0;
 
-        SceneManager.LoadScene("singleton");
-       
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
     }
 
     private void DestroyAllGameObjects()
