@@ -10,9 +10,8 @@ public class UIManager : MonoBehaviour
     public TMP_Text stateText;
     //public TMP_Text coinText;
     public GameObject gameOverPanel;
-    //public GameObject victoryPanel;
+    public GameObject gameStartPanel;
 
-    private int coinCount = 0;
 
     void Start()
     {
@@ -22,8 +21,7 @@ public class UIManager : MonoBehaviour
         EventManager.Subscribe("OnScoreChanged", UpdateScore);
         EventManager.Subscribe("OnPlayerStateChanged", UpdateStateDisplay);
         EventManager.Subscribe("OnGameOver", ShowGameOver); // GAME OVER
-        EventManager.Subscribe("OnLevelComplete", ShowVictory); // VICTORY
-        EventManager.Subscribe("OnCoinCollected", UpdateCoinCount);
+        EventManager.Subscribe("OnGameStart", ShowStart); // Game Start
 
         // Initialize
         if (gameOverPanel != null)
@@ -31,20 +29,9 @@ public class UIManager : MonoBehaviour
             gameOverPanel.SetActive(false);
             Debug.Log("Game Over Panel disabled");
         }
-
-        if (victoryPanel != null)
-        {
-            victoryPanel.SetActive(false);
-            Debug.Log("Victory Panel disabled");
-        }
-
-        if (coinText != null)
-        {
-            coinText.text = "Coins: 0";
-        }
     }
 
-    void Update()
+    /*void Update()
     {
         // Update timer
         if (timerText && GameManager.Instance != null)
@@ -54,7 +41,7 @@ public class UIManager : MonoBehaviour
             int seconds = Mathf.FloorToInt(time % 60);
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
-    }
+    }*/
 
     void OnDestroy()
     {
@@ -62,8 +49,6 @@ public class UIManager : MonoBehaviour
         EventManager.Unsubscribe("OnScoreChanged", UpdateScore);
         EventManager.Unsubscribe("OnPlayerStateChanged", UpdateStateDisplay);
         EventManager.Unsubscribe("OnGameOver", ShowGameOver);
-        EventManager.Unsubscribe("OnLevelComplete", ShowVictory);
-        EventManager.Unsubscribe("OnCoinCollected", UpdateCoinCount);
     }
 
     void UpdateScore(object scoreData)
@@ -82,24 +67,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void UpdateCoinCount(object coinValue)
+    /*void UpdateCoinCount(object coinValue)
     {
         coinCount++;
         if (coinText != null)
         {
             coinText.text = "Coins: " + coinCount;
         }
-    }
+    }*/
 
     void ShowGameOver(object finalScore)
     {
         Debug.Log("🔴 SHOWING GAME OVER PANEL");
-
-        // Make sure victory panel is hidden
-        if (victoryPanel != null)
-        {
-            victoryPanel.SetActive(false);
-        }
 
         // Show game over panel
         if (gameOverPanel != null)
@@ -113,36 +92,28 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /*void ShowVictory(object finalScore)
+    void ShowStart()
     {
-        Debug.Log("🟢 SHOWING VICTORY PANEL");
+        Debug.Log("🔴 SHOWING START PANEL");
 
-        // Make sure game over panel is hidden
-        if (gameOverPanel != null)
+        // Show start panel
+        if (gameStartPanel != null)
         {
-            gameOverPanel.SetActive(false);
-        }
-
-        // Show victory panel
-        if (victoryPanel != null)
-        {
-            victoryPanel.SetActive(true);
-            Debug.Log("Victory Panel activated");
+            gameStartPanel.SetActive(true);
+            Debug.Log("Game Start Panel activated");
+            Time.timeScale = 0f; // Pause the game
         }
         else
         {
-            Debug.LogError("❌ Victory Panel is NULL!");
+            Debug.LogError("❌ Game Start Panel is NULL!");
         }
-    }*/
+    }
 
     public void OnRestartButton()
     {
         if (GameManager.Instance != null)
-        {
-            coinCount = 0;
+        { 
             GameManager.Instance.RestartGame();
         }
     }
-
-   
 }
