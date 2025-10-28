@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
         score += points;
         Debug.Log($"Score increased by {points}. Total: {score}");
         UpdateUI();
+        EventManager.TriggerEvent("OnScoreChanged", score);
     }
 
 
@@ -92,11 +93,7 @@ public class GameManager : MonoBehaviour
         lives--;
         Debug.Log($"Life lost! Lives remaining: {lives}");
         UpdateUI();
-
-        if (lives <= 0)
-        {
-            GameOver();
-        }
+        EventManager.TriggerEvent("OnLivesChanged", lives);
     }
 
     public void EnemyKilled()
@@ -104,6 +101,7 @@ public class GameManager : MonoBehaviour
         enemiesKilled++;
         AddScore(100); // 100 points per enemy
         Debug.Log($"Enemy killed! Total enemies defeated: {enemiesKilled}");
+        EventManager.TriggerEvent("OnEnemiesKilledChanged", enemiesKilled);
     }
 
 
