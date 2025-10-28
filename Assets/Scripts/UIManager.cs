@@ -48,9 +48,11 @@ public class UIManager : MonoBehaviour
     void OnDestroy()
     {
         // Unsubscribe to prevent errors on scene change
-        EventManager.Unsubscribe("OnScoreChanged", UpdateScore);
-        EventManager.Unsubscribe("OnPlayerStateChanged", UpdateStateDisplay);
-        EventManager.Unsubscribe("OnGameOver", ShowGameOver);
+        EventManager.Subscribe("OnScoreChanged", UpdateScore);
+        EventManager.Subscribe("OnLivesChanged", UpdateLives);
+        EventManager.Subscribe("OnEnemiesKilledChanged", UpdateEnemiesKilled);
+        EventManager.Subscribe("OnPlayerStateChanged", UpdateStateDisplay);
+        EventManager.Subscribe("OnGameOver", ShowGameOver); // GAME OVER
     }
 
     void UpdateScore(object scoreData)
@@ -85,7 +87,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowGameOver()
+    public void ShowGameOver(object panel)
     {
         Debug.Log("🔴 SHOWING GAME OVER PANEL");
        

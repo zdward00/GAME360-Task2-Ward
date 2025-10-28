@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
     {
         RefreshUIReferences();
         UpdateUI();
-        if (gameStartPanel) gameStartPanel.SetActive(true);
     }
 
     public void Start()
@@ -122,6 +121,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GAME OVER!");
         if (gameOverPanel) gameOverPanel.SetActive(true);
+        EventManager.TriggerEvent("OnGameOver", gameOverPanel);
         Time.timeScale = 0f; // Pause the game
     }
 
