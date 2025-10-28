@@ -85,12 +85,12 @@ public class UIManager : MonoBehaviour
         {
             stateText.text = "State: " + stateData.ToString();
         }
+        
     }
 
     public void ShowGameOver(object panel)
     {
         Debug.Log("🔴 SHOWING GAME OVER PANEL");
-       
         // Show game over panel
         if (gameOverPanel != null)
         {

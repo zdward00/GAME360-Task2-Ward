@@ -93,6 +93,12 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Life lost! Lives remaining: {lives}");
         UpdateUI();
         EventManager.TriggerEvent("OnLivesChanged", lives);
+
+        if (lives <= 0)
+        {
+            GameOver();
+        }
+
     }
 
     public void EnemyKilled()
@@ -120,8 +126,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("GAME OVER!");
+        gameOverPanel = GameObject.Find("GameEndPanel");
         if (gameOverPanel) gameOverPanel.SetActive(true);
-        EventManager.TriggerEvent("OnGameOver", gameOverPanel);
+        EventManager.TriggerEvent("OnGameOver", score);
         Time.timeScale = 0f; // Pause the game
     }
 

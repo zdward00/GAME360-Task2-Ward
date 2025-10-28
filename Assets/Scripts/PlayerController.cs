@@ -86,10 +86,6 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.LoseLife();
         }
 
-        if(GameManager.Instance.lives <= 0)
-        {
-            GameManager.Instance.GameOver();
-        }
        
 
     }
