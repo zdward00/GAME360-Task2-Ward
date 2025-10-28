@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
     public int enemiesKilled = 0;
 
     [Header("UI References")]
-    public Text scoreText;
-    public Text livesText;
-    public Text enemiesKilledText;
+    public TMP_Text scoreText;
+    public TMP_Text livesText;
+    public TMP_Text enemiesKilledText;
     public GameObject gameOverPanel;
     public GameObject gameStartPanel;
     //public TMP_Text scoreText;
@@ -41,30 +41,29 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        RefreshUIReferences();
-        UpdateUI();
-        if (gameStartPanel) gameStartPanel.SetActive(true);
-    }
-
-    private void Start()
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         RefreshUIReferences();
         UpdateUI();
     }
 
-    private void RefreshUIReferences()
+    public void Start()
+    {
+        RefreshUIReferences();
+        UpdateUI();
+    }
+
+    public void RefreshUIReferences()
     {
         
-       scoreText = GameObject.Find("Score")?.GetComponent<Text>();
-       livesText = GameObject.Find("Lives")?.GetComponent<Text>();
-       enemiesKilledText = GameObject.Find("EnemiesKilled")?.GetComponent<Text>();
+       scoreText = GameObject.Find("Score")?.GetComponent<TMP_Text>();
+       livesText = GameObject.Find("Lives")?.GetComponent<TMP_Text>();
+       enemiesKilledText = GameObject.Find("EnemiesKilled")?.GetComponent<TMP_Text>();
        gameOverPanel = GameObject.Find("GameEndPanel");
         if (gameOverPanel != null)
         {
@@ -74,7 +73,8 @@ public class GameManager : MonoBehaviour
         gameStartPanel = GameObject.Find("GameStartPanel");
         if (gameStartPanel != null)
         {
-            gameStartPanel.SetActive(false);
+            gameStartPanel.SetActive(true);
+            Time.timeScale = 0f; // Pause the game
         }
 
     }
@@ -83,6 +83,7 @@ public class GameManager : MonoBehaviour
         score += points;
         Debug.Log($"Score increased by {points}. Total: {score}");
         UpdateUI();
+        EventManager.TriggerEvent("OnScoreChanged", score);
     }
 
 
@@ -91,11 +92,13 @@ public class GameManager : MonoBehaviour
         lives--;
         Debug.Log($"Life lost! Lives remaining: {lives}");
         UpdateUI();
+        EventManager.TriggerEvent("OnLivesChanged", lives);
 
         if (lives <= 0)
         {
             GameOver();
         }
+
     }
 
     public void EnemyKilled()
@@ -103,6 +106,7 @@ public class GameManager : MonoBehaviour
         enemiesKilled++;
         AddScore(100); // 100 points per enemy
         Debug.Log($"Enemy killed! Total enemies defeated: {enemiesKilled}");
+        EventManager.TriggerEvent("OnEnemiesKilledChanged", enemiesKilled);
     }
 
 
@@ -112,19 +116,20 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Collectible picked up worth {value} points!");
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         if (scoreText) scoreText.text = "Score: " + score;
         if (livesText) livesText.text = "Lives: " + lives;
         if (enemiesKilledText) enemiesKilledText.text = "Enemies: " + enemiesKilled;
     }
 
-    private void GameOver()
+    public void GameOver()
     {
         Debug.Log("GAME OVER!");
+        gameOverPanel = GameObject.Find("GameEndPanel");
         if (gameOverPanel) gameOverPanel.SetActive(true);
+        EventManager.TriggerEvent("OnGameOver", score);
         Time.timeScale = 0f; // Pause the game
-        SceneManager.LoadScene("GameOver");
     }
 
     public void reloadGame()
@@ -148,11 +153,11 @@ public class GameManager : MonoBehaviour
         lives = 3;
         enemiesKilled = 0;
 
-        SceneManager.LoadScene("singleton");
-       
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
     }
 
-    private void DestroyAllGameObjects()
+    public void DestroyAllGameObjects()
     {
         // Destroy all enemies
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");

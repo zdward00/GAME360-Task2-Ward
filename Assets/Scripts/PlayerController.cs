@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    private PlayerState currentState;
     [Header("Movement")]
     public float moveSpeed = 5f;
     [Header("Shooting")]
@@ -17,6 +19,11 @@ public class PlayerController : MonoBehaviour
     private AudioSource audioSource;//Unity componenet
     private Rigidbody2D rb;
 
+    public float getMoveSpeed()
+    {
+        return moveSpeed;
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -29,13 +36,21 @@ public class PlayerController : MonoBehaviour
         // Configure AudioSource for sound effects
         audioSource.playOnAwake = false;
         audioSource.volume = 0.7f; // Adjust volume as needed
+
+       currentState = new IdleState();
+       currentState.EnterState(this);
     }
-    private void Update()
+    public void Update()
     {
-        HandleMovement();
+        //HandleMovement();
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        Vector2 movement = new Vector2(horizontal, vertical).normalized;
+        rb.velocity = movement * moveSpeed;
         HandleShooting();
+        currentState.UpdateState(this);
     }
-    private void HandleMovement()
+   public void HandleMovement()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -73,5 +88,17 @@ public class PlayerController : MonoBehaviour
 
        
 
+    }
+
+    public void ChangeState(PlayerState newState)
+    {
+        // Exit old state
+        currentState.ExitState(this);
+
+        // Switch to new state
+        currentState = newState;
+
+        // Enter new state
+        currentState.EnterState(this);
     }
 }
